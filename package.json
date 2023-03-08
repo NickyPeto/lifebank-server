@@ -1,0 +1,27 @@
+{
+  "name": "lifebank-server",
+  "version": "1.0.0",
+  "description": "LifeBank's app server",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NickyPeto/life-bank.git"
+  },
+  "author": "Nicole Petovello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NickyPeto/life-bank/issues"
+  },
+  "homepage": "https://github.com/NickyPeto/life-bank#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.1",
+    "nodemon": "^2.0.21"
+  }
+}
