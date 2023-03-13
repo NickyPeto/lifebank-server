@@ -21,6 +21,17 @@ require("dotenv").config();
 const db = require("./models");
 const { login } = require("./models/auth/authschema");
 const authSchema = require("./models/auth/authschema");
+const {
+  schema,
+  dataArray,
+} = require("./models/transactions/transactionsschema");
+
+const {
+  investmentsSchema,
+  investmentsData,
+} = require("./models/investments/investmentsschema");
+
+const { billsSchema, billsData } = require("./models/bills/billsschema");
 
 db.mongoose
   .connect(db.url, {
@@ -49,6 +60,47 @@ app.post("/login", async (req, res) => {
     res.status(201).json({
       message: "Login successful",
       login: loginCall.data,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+app.post("/register", async (req, res) => {
+  const name = req.body.name;
+  const surname = req.body.surname;
+});
+
+app.get("/transactions", async (req, res) => {
+  try {
+    await schema.insertMany(dataArray);
+    res.status(200).json({
+      message: "Data retrieved successfully",
+      transactions: dataArray,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+app.get("/investments", async (req, res) => {
+  try {
+    await investmentsSchema.insertMany(investmentsData);
+    res.status(200).json({
+      message: "Investments data retrieved successfully",
+      transactions: investmentsData,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+app.get("/bills", async (req, res) => {
+  try {
+    await billsSchema.insertMany(billsData);
+    res.status(200).json({
+      message: "Bills data retrieved successfully",
+      transactions: billsData,
     });
   } catch (e) {
     console.log(e);
