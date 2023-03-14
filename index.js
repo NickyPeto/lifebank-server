@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieSession = require("cookie-session");
 
 const app = express();
 
@@ -32,6 +33,8 @@ const {
 } = require("./models/investments/investmentsschema");
 
 const { billsSchema, billsData } = require("./models/bills/billsschema");
+const { signUp, signIn, signOut } = require("./controllers/user.controller");
+const { checkDuplicateUserOrMail } = require("./middleware/verifyUser");
 
 db.mongoose
   .connect(db.url, {
@@ -46,29 +49,31 @@ db.mongoose
     process.exit();
   });
 
-app.post("/login", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const loginCall = new authSchema.login({
-    data: {
-      email: email,
-      password: password,
-    },
-  });
-  try {
-    await loginCall.save();
-    res.status(201).json({
-      message: "Login successful",
-      login: loginCall.data,
-    });
-  } catch (e) {
-    console.log(e);
-  }
+app.use(
+  cookieSession({
+    name: "bezkoder-session",
+    // keys: ['key1', 'key2'],
+    secret: "COOKIE_SECRET", // should use as secret environment variable
+    httpOnly: true,
+  })
+);
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
+  next();
+});
+
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to LifeBank server" });
+});
+
+app.post("/login", (req, res) => {
+  signIn(req, res);
 });
 
 app.post("/register", async (req, res) => {
-  const name = req.body.name;
-  const surname = req.body.surname;
+  checkDuplicateUserOrMail(req, res);
+  signUp(req, res);
 });
 
 app.get("/transactions", async (req, res) => {
