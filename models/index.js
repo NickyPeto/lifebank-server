@@ -8,4 +8,5 @@ const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.user = UserSchema;
+
 module.exports = db;

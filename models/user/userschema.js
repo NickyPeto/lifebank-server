@@ -1,15 +1,35 @@
 const mongoose = require("mongoose");
-const transactions = require("../transactions/transactionsschema");
-const bills = require("../bills/billsschema");
-const investments = require("../investments/investmentsschema");
 
 const userSchema = new mongoose.Schema({
-  data: {
-    name: String,
-    surname: String,
-    email: String,
-    password: String,
-    phoneNumber: Number,
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    min: 3,
+    max: 20,
+  },
+  surname: {
+    type: String,
+    required: true,
+    trim: true,
+    min: 3,
+    max: 20,
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+    index: true,
+    lowercase: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: Number,
+    required: false,
   },
   createdAt: {
     type: Date,
@@ -18,35 +38,32 @@ const userSchema = new mongoose.Schema({
 });
 
 const userData = new mongoose.Schema({
-  data: {
-    name: String,
-    surname: String,
-    email: String,
-    password: String,
-    phoneNumber: Number,
-    bankData: {
-      balance: String,
-      iban: String,
-    },
-    transactions: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Transactions",
-      },
-    ],
-    bills: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Bills",
-      },
-    ],
-    investments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Investments",
-      },
-    ],
+  userData: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
+  bankData: {
+    balance: String,
+    iban: String,
+  },
+  transactions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transactions",
+    },
+  ],
+  bills: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Bills",
+    },
+  ],
+  investments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Investments",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -55,5 +72,7 @@ const userData = new mongoose.Schema({
 
 const UserSchema = mongoose.model("User", userSchema);
 const UserDataChema = mongoose.model("UserData", userData);
+
+UserSchema.createIndexes();
 
 module.exports = { UserSchema, UserDataChema };
